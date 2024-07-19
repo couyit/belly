@@ -1,3 +1,5 @@
+use std::any::Any;
+
 /// The `bevy_stylebox` is plugin for [bevy](https://bevyengine.org/) engine which
 /// allows you to fill UI node with sliced by 9 parts region of image. `Stylebox`
 /// doesn't add any additional UI components. It renders just like `UiImage`, but
@@ -6,7 +8,7 @@
 use bevy::{
     prelude::*,
     render::{Extract, RenderApp},
-    ui::{ExtractedUiNode, ExtractedUiNodes, FocusPolicy, RenderUiSystem, UiStack},
+    ui::{ExtractedUiNode, ExtractedUiNodes, FocusPolicy, NodeType, RenderUiSystem, UiStack},
 };
 
 /// `Stylebox` plugin for `bevy` engine. Dont forget to register it:
@@ -34,7 +36,7 @@ impl Plugin for StyleboxPlugin {
             .sub_app_mut(RenderApp)
             .add_systems(
                 ExtractSchedule,
-                extract_stylebox.after(RenderUiSystem::ExtractNode),
+                extract_stylebox.after(RenderUiSystem::ExtractText),
             );
     }
 }
@@ -439,15 +441,18 @@ pub fn extract_stylebox(
                 *entity,
                 ExtractedUiNode {
                     transform: tr * patch.transform,
-                    color: stylebox.modulate,
+                    color: stylebox.modulate.into(),
                     rect: patch.region,
-                    image: image.clone_weak().into(),
+                    image: image.id(),
                     atlas_size: Some(img_size),
                     clip: clip.map(|clip| clip.clip),
                     stack_index: stack_index as u32,
                     flip_x: false,
                     flip_y: false,
-                    camera_entity: Entity::PLACEHOLDER
+                    camera_entity: Entity::PLACEHOLDER,
+                    border_radius: [0.0, 0.0, 0.0, 0.0],
+                    border: [0.0, 0.0, 0.0, 0.0],
+                    node_type: NodeType::Rect,
                 },
             );
 

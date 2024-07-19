@@ -32,7 +32,7 @@ fn setup(mut commands: Commands, asset_server: Res<AssetServer>) {
         slice: UiRect::all(Val::Percent(50.)),
         width: UiRect::all(Val::Px(OUTER_RADIUS)),
         texture: circle.clone(),
-        modulate: Color::DARK_GRAY.into(),
+        modulate: Color::hsl(0.0, 0.0, 0.66).into(),
         ..default()
     };
     let box_round_bot_inner = Stylebox {
@@ -51,7 +51,7 @@ fn setup(mut commands: Commands, asset_server: Res<AssetServer>) {
         slice: UiRect::all(Val::Percent(50.)),
         width: UiRect::all(Val::Px(BUTTON_RADIUS)),
         texture: circle.clone(),
-        modulate: Color::DARK_GRAY,
+        modulate: Color::hsl(0.0, 0.0, 0.66),
         ..default()
     };
     commands.spawn(Camera2dBundle::default());
@@ -147,7 +147,7 @@ fn setup(mut commands: Commands, asset_server: Res<AssetServer>) {
                                 })
                                 .with_children(|parent| {
                                     parent.spawn(ImageBundle {
-                                        background_color: Color::DARK_GRAY.into(),
+                                        background_color: Color::hsl(0.0, 0.0, 0.66).into(),
                                         image: UiImage {
                                             texture: asset_server.load("cross.png"),
                                             ..default()
@@ -190,7 +190,7 @@ fn setup(mut commands: Commands, asset_server: Res<AssetServer>) {
 
                             parent
                                 .spawn(NodeBundle {
-                                    background_color: Color::LIME_GREEN.into(),
+                                    background_color: Color::hsl(120.0, 0.61, 0.5).into(),
                                     style: Style {
                                         flex_grow: 1.,
                                         justify_content: JustifyContent::Center,

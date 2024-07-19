@@ -15,7 +15,7 @@ fn setup(mut commands: Commands, asset_server: Res<AssetServer>) {
         slice: UiRect::all(Val::Percent(50.)),
         width: UiRect::all(Val::Px(32.)),
         texture: asset_server.load("circle.png"),
-        modulate: Color::DARK_GRAY,
+        modulate: Color::hsl(0.0, 0.0, 0.66),
         ..default()
     };
     let tex = Stylebox {

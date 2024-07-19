@@ -1,12 +1,12 @@
 use std::marker::PhantomData;
 
+use bevy::color::Color;
+
 use crate::{
     build::{Prop, TransformationResult},
     impl_properties,
-    prelude::ColorFromHexExtension,
     relations::bind::{BindableSource, BindableTarget},
 };
-use bevy::prelude::*;
 
 use super::{GetProperties, SetGet};
 
@@ -15,10 +15,10 @@ impl_properties! { ColorProperties for Color {
     g(set_g, g) => |v: f32| v.min(1.).max(0.);
     b(set_b, b) => |v: f32| v.min(1.).max(0.);
     a(set_a, a) => |v: f32| v.min(1.).max(0.);
-    one_minus_r(set_r, r) => |v: f32| (1.0 - v).min(1.).max(0.);
-    one_minus_g(set_g, g) => |v: f32| (1.0 - v).min(1.).max(0.);
-    one_minus_b(set_b, b) => |v: f32| (1.0 - v).min(1.).max(0.);
-    one_minus_a(set_a, a) => |v: f32| (1.0 - v).min(1.).max(0.);
+    one_minus_r(set, r) => |v: f32| (1.0 - v).min(1.).max(0.);
+    one_minus_g(set, g) => |v: f32| (1.0 - v).min(1.).max(0.);
+    one_minus_b(set, b) => |v: f32| (1.0 - v).min(1.).max(0.);
+    one_minus_a(set, a) => |v: f32| (1.0 - v).min(1.).max(0.);
     hex(set_hex, get_hex) => |v: String| v.clone();
 }}
 

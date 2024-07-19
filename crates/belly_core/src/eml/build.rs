@@ -6,7 +6,10 @@ use crate::{
     tags,
 };
 use bevy::{
-    ecs::system::{Command, CommandQueue, EntityCommands},
+    ecs::{
+        system::EntityCommands,
+        world::{Command, CommandQueue},
+    },
     prelude::*,
     ui::FocusPolicy,
     utils::{HashMap, HashSet},
@@ -59,7 +62,7 @@ pub trait RegisterWidget {
 impl RegisterWidget for App {
     fn register_widget<T: Widget + Sync + Send + 'static>(&mut self) -> &mut Self {
         let registry = self
-            .world
+            .world_mut()
             .get_resource_or_insert_with(WidgetRegistry::default)
             .clone();
         let widget = T::instance();
@@ -125,8 +128,7 @@ impl<'w, 's> WidgetContext<'w, 's> {
         self.commands.add(command)
     }
 
-    pub fn insert<'a>(&'a mut self, bundle: impl Bundle) -> EntityCommands<'a> 
-    {
+    pub fn insert<'a>(&'a mut self, bundle: impl Bundle) -> EntityCommands<'a> {
         let mut commands = self.commands.entity(self.data.entity);
         commands.insert(bundle);
         commands
