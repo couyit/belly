@@ -1,6 +1,6 @@
 use std::marker::PhantomData;
 
-use bevy::color::Color;
+use bevy::color::{Color, Srgba};
 
 use crate::{
     build::{Prop, TransformationResult},
@@ -8,19 +8,37 @@ use crate::{
     relations::bind::{BindableSource, BindableTarget},
 };
 
-use super::{GetProperties, SetGet};
+use super::{GetProperties, PropertyProtocol, SetGet};
 
-impl_properties! { ColorProperties for Color {
-    r(set_r, r) => |v: f32| v.min(1.).max(0.);
-    g(set_g, g) => |v: f32| v.min(1.).max(0.);
-    b(set_b, b) => |v: f32| v.min(1.).max(0.);
-    a(set_a, a) => |v: f32| v.min(1.).max(0.);
-    one_minus_r(set, r) => |v: f32| (1.0 - v).min(1.).max(0.);
-    one_minus_g(set, g) => |v: f32| (1.0 - v).min(1.).max(0.);
-    one_minus_b(set, b) => |v: f32| (1.0 - v).min(1.).max(0.);
-    one_minus_a(set, a) => |v: f32| (1.0 - v).min(1.).max(0.);
-    hex(set_hex, get_hex) => |v: String| v.clone();
-}}
+// impl_properties! { ColorProperties for Color {
+// srgba()
+// g(set_g, g) => |v: f32| v.min(1.).max(0.);
+// b(set_b, b) => |v: f32| v.min(1.).max(0.);
+// a(set_a, a) => |v: f32| v.min(1.).max(0.);
+// one_minus_r(set, r) => |v: f32| (1.0 - v).min(1.).max(0.);
+// one_minus_g(set, g) => |v: f32| (1.0 - v).min(1.).max(0.);
+// one_minus_b(set, b) => |v: f32| (1.0 - v).min(1.).max(0.);
+// one_minus_a(set, a) => |v: f32| (1.0 - v).min(1.).max(0.);
+// hex(set_hex, get_hex) => |v: String| v.clone();
+// }}
+
+// pub struct ColorProperties;
+
+// fn set_srgba(val: &Srgba, mut prop: Prop<Color>) -> TransformationResult {
+//     if !match *prop {
+//         Color::Srgba(srgba) => srgba == *val,
+//         _ => false,
+//     } {}
+//     Ok(())
+// }
+// fn get_srgba(prop: Prop<Color>) -> Srgba {
+//     prop.as_ref().into()
+// }
+// impl ColorProperties {
+//     pub fn srgba(&self) -> SetGet<Color, Srgba> {
+//         SetGet::new(set_srgba, get_srgba)
+//     }
+// }
 
 pub struct OptionProperties<T>(PhantomData<T>);
 fn set_some<T: BindableSource + BindableTarget>(

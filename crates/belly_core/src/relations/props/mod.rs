@@ -147,17 +147,17 @@ impl<P, V> SetGet<P, V> {
 
 #[macro_export]
 macro_rules! impl_properties {
-    (@method $cls:ty, $prop:ident, $setter:ident, $getter:ident, $var:ident, $itemty:ty, $expr:expr) => {
+    (@method $cls:ty, $prop:ident, $setter_var:ident, $setter_expr:expr, $getter_var:ident, $getter_expr:expr, $var:ident, $itemty:ty, $expr:expr) => {
         pub fn $prop(&self) -> $crate::relations::props::SetGet<$cls, $itemty> {
-            fn set($var: &$itemty, mut prop: $crate::relations::props::Prop<$cls>) -> $crate::relations::bind::TransformationResult {
-                let $var = $expr;
-                if $var != prop.$getter() {
-                    prop.$setter($var);
+            fn set($var: &$itemty, mut $getter_var: $crate::relations::props::Prop<$cls>) -> $crate::relations::bind::TransformationResult {
+                let $setter_var = $expr;
+                if $setter_var != $getter_expr {
+                    $setter_expr
                 }
                 Ok(())
             }
-            fn get(prop: $crate::relations::props::Prop<$cls>) -> $itemty {
-                let $var = prop.$getter();
+            fn get($getter_var: $crate::relations::props::Prop<$cls>) -> $itemty {
+                let $var = $getter_expr;
                 let $var = $expr;
                 $var
             }
@@ -165,7 +165,7 @@ macro_rules! impl_properties {
         }
 
     };
-    ($struct:ident for $cls:ty { $($prop:ident($setter:ident, $getter:ident) => |$var:ident: $itemty:ty| $expr:expr;)+ }) => {
+    ($struct:ident for $cls:ty { $($prop:ident(|$setter_var:ident| $setter_expr:expr, |$getter_var:ident| $getter_expr:expr) => |$var:ident: $itemty:ty| $expr:expr;)+ }) => {
         pub struct $struct;
         impl $crate::relations::props::GetProperties for $cls {
             type Item = $struct;
@@ -174,7 +174,7 @@ macro_rules! impl_properties {
             }
         }
         impl $struct {
-            $(impl_properties!{ @method $cls, $prop, $setter, $getter, $var, $itemty, $expr })+
+            $(impl_properties!{ @method $cls, $prop, $setter_var, $setter_expr, $getter_var, $getter_expr, $var, $itemty, $expr })+
         }
     };
     ($struct:ident for $cls:ty as $ext:ident { $($prop:ident($setter:ident, $getter:ident) => |$var:ident: $itemty:ty| $expr:expr;)+ }) => {
